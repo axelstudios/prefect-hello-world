@@ -1,16 +1,6 @@
-# Welcome to your prefect.yaml file! You can use this file for storing and managing
-# configuration for deploying your flows. We recommend committing this file to source
-# control along with your flow code.
-
 # Generic metadata about this project
 name: prefect-hello-world
 prefect-version: 3.4.7
-
-# build section allows you to manage and build docker images
-build: null
-
-# push section allows you to manage if and how this project is uploaded to remote locations
-push: null
 
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
@@ -18,9 +8,12 @@ pull:
     id: clone-step
     repository: https://github.com/axelstudios/prefect-hello-world.git
     branch: main
-- prefect.deployments.steps.pip_install_requirements:
+- prefect.deployments.steps.run_shell_script:
+    id: install-dependencies
     directory: "{{ clone-step.directory }}"
-    requirements_file: requirements.txt
+    script: |
+      uv export -o requirements.txt
+      uv pip install --system -r requirements.txt
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
@@ -34,5 +27,7 @@ deployments:
   work_pool:
     name: docker-pool
     work_queue_name: null
+    job_variables:
+      auto_remove: false
   schedules: []
   build: null

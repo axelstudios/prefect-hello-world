@@ -1,2 +1,0 @@
-numpy
-prefect==3.4.7
