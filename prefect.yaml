@@ -28,6 +28,7 @@ deployments:
     name: docker-pool
     work_queue_name: null
     job_variables:
+      # TODO remove
       auto_remove: false
   schedules: []
   build: null
